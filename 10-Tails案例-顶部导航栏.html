@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tials智能学习辅助系统</title>
+    <style>
+        /* 重置默认样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #daohanglan{
+            width: 80%;
+            margin: 0 auto;
+        }
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-image: url("1.img/二次元壁纸.jpg");
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        /* 顶部导航栏样式 */
+        .navbar {
+            background-color: #808080;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: bold;
+            font-family: "楷体";
+        }
+
+        .navbar .logout {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border: 1px solid #ffffff;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar .logout:hover {
+            background-color: #ffffff;
+            color: #808080;
+        }
+
+        /* ========== 搜索表单区域样式 ========== */
+        .search-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 28px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .search-left {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 15px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid rgba(204, 204, 204, 0.7);
+            border-radius: 10px;
+            outline: none;
+            width: 220px;
+            background-color: rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.15);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%23666' d='M7 10L1 4h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .btn {
+            padding: 12px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+
+        .btn-submit {
+            background-color: #1890ff;
+            color: #ffffff;
+        }
+
+        .btn-submit:hover {
+            background-color: #40a9ff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.35);
+        }
+
+        .btn-reset {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #555;
+            border: 2px solid rgba(204, 204, 204, 0.7);
+        }
+
+        .btn-reset:hover {
+            background-color: rgba(240, 240, 240, 0.9);
+            border-color: #999;
+        }
+
+        /* ========== 表格展示区域样式 ========== */
+        .table-section {
+            background-color: rgba(255, 255, 255, 0.03);
+            padding: 30px 40px;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+
+        .table-section h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-left: 12px;
+            border-left: 4px solid #1890ff;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .data-table thead {
+            background-color: #1890ff;
+        }
+
+        .data-table thead th {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 14px 16px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .data-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: rgba(24, 144, 255, 0.06);
+        }
+
+        .data-table tbody td {
+            padding: 14px 16px;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* 头像样式 */
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 性别标签样式 */
+        .gender-tag {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .gender-male {
+            background-color: rgba(24, 144, 255, 0.1);
+            color: #1890ff;
+        }
+
+        .gender-female {
+            background-color: rgba(255, 77, 136, 0.1);
+            color: #ff4d88;
+        }
+
+        /* 操作按钮样式 */
+        .action-btn {
+            padding: 6px 16px;
+            font-size: 13px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background-color: rgba(24, 144, 255, 0.1);
+            color: #1890ff;
+        }
+
+        .btn-edit:hover {
+            background-color: #1890ff;
+            color: #ffffff;
+        }
+
+        .btn-delete {
+            background-color: rgba(255, 77, 79, 0.1);
+            color: #ff4d4f;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff4d4f;
+            color: #ffffff;
+        }
+
+        /* ========== 页脚版权区域样式 ========== */
+        .footer {
+            background-color: rgba(255, 182, 193, 0.35);
+            color: #ffffff;
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer p {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="daohanglan">
+        <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <h1 class="title">Tials智能学习辅助系统</h1>
+        <a href="#" class="logout">退出登录</a>
+    </nav>
+
+    <!-- 搜索表单区域 -->
+    <section class="search-section">
+        <form action="你的提交地址" method="POST">
+            <div class="search-left">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" name="name" placeholder="请输入姓名">
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">性别</label>
+                    <select id="gender" name="gender">
+                        <option value="" disabled selected hidden>请选择性别</option>
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="education">学历</label>
+                    <select id="education" name="education">
+                        <option value="" disabled selected hidden>请选择学历</option>
+                        <option value="junior">初中</option>
+                        <option value="senior">高中</option>
+                        <option value="bachelor">本科</option>
+                        <option value="master">硕士</option>
+                        <option value="doctor">博士</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-submit">提 交</button>
+                <button type="reset" class="btn btn-reset">重 置</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- 表格展示区域 -->
+    <section class="table-section">
+        <h2>用户信息列表</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>头像</th>
+                    <th>职位</th>
+                    <th>入职日期</th>
+                    <th>最后操作时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 测试数据1：令狐冲 -->
+                <tr>
+                    <td>令狐冲</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Linghu" alt="令狐冲头像" class="avatar">
+                    </td>
+                    <td>华山派大弟子</td>
+                    <td>2023-03-15</td>
+                    <td>2026-09-23 10:30:00</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <!-- 测试数据2：任盈盈 -->
+                <tr>
+                    <td>任盈盈</td>
+                    <td><span class="gender-tag gender-female">女</span></td>
+                    <td><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Renying" alt="任盈盈头像" class="avatar">
+                    </td>
+                    <td>日月神教圣姑</td>
+                    <td>2023-06-20</td>
+                    <td>2026-09-22 16:45:30</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <!-- 测试数据3：岳不群 -->
+                <tr>
+                    <td>岳不群</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Yuebuq" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>华山派掌门</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>张楚群</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="1.img\895bf4fae45c7b878b200853ce5f30e1.jpg" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>门童</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>胡狗剩</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="1.img\dd67b7020ef9ba4efb6ad42be2eb3ff5.jpg" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>门童</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>没木泽</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="1.img\ea966b9c92ccf53d4dd6f77c44e884ac.jpg" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>灵犬</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>宇宙世界超级无敌第一大帅哥王鹏皓</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="1.img\d3b884f08e82f557edd770a6619193c3.jpg" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>宇宙世界超级无敌第一大帅哥</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>宇宙世界超级无敌第一大美女王吕莹</td>
+                    <td><span class="gender-tag gender-male">男</span></td>
+                    <td><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Yuebuq" alt="岳不群头像" class="avatar">
+                    </td>
+                    <td>宇宙世界超级无敌第一大美女</td>
+                    <td>2022-01-10</td>
+                    <td>2026-09-23 09:15:20</td>
+                    <td>
+                        <button class="action-btn btn-edit">编辑</button>
+                        <button class="action-btn btn-delete">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- 页脚版权区域 -->
+    <footer class="footer">
+        <p>吉林省长春市榆树市王鹏皓作</p>
+        <p>版权所有Copyinght 200+-2024 AllRights Resebed</p>
+    </footer>
+    </div>
+</body>
+
+</html>
